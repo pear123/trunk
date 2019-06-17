@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="true">
+    <!-- scan and set properties file-->
+    <context:property-placeholder location="classpath*:config/*.properties"/>
+
+    <context:annotation-config/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"
+                  p:driverClass="${jdbc.driverClassName}" p:jdbcUrl="${jdbc.url}" p:username="${jdbc.username}"
+                  p:password="${jdbc.password}"
+                  p:idleConnectionTestPeriod="60"
+                  p:idleMaxAge="240"
+                  p:maxConnectionsPerPartition="30"
+                  p:minConnectionsPerPartition="20"
+                  p:partitionCount="3"
+                  p:acquireIncrement="10"
+                  p:statementsCacheSize="50"
+                  p:releaseHelperThreads="3"/>
+        </property>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+          p:dataSource-ref="dataSource">
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=${hibernate.dialect}
+                hibernate.show_sql=${hibernate.show_sql}
+                hibernate.jdbc.fetch_size=100
+                hibernate.jdbc.batch_size=100
+                hibernate.query.substitutions=true 1, false 0
+                hibernate.cache.use_second_level_cache=true
+                hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider
+            </value>
+        </property>
+        <property name="packagesToScan">
+            <list>
+                <value>com.arvato.cc.model</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactory"/>
+
+    <tx:annotation-driven/>
+
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice"
+                     pointcut="execution(* com.*..*.service1.*Service.*(..))
+                      || execution(* com.*..*.service.*Service.*(..))"/>
+    </aop:config>
+
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="*" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:i18n/messages"/>
+        <property name="cacheSeconds" value="0"/>
+    </bean>
+
+    <bean id="jcaptchaGMailEngine" class="com.arvato.jdf.jcaptcha.JCaptchaGMailEngine"/>
+
+    <bean class="com.arvato.jdf.util.ContextHelper" lazy-init="false"/>
+
+    <bean id="captchaEngine" class="com.octo.captcha.engine.image.gimpy.SimpleListImageCaptchaEngine"/>
+
+    <bean id="paginatedListFactory" class="com.arvato.cc.util.PaginatedListFactory"
+          p:defaultPageNum="${paginated.pagenum}" p:defaultPageSize="${paginated.pagesize}"
+          p:defaultDir="${paginated.dir}"/>
+
+
+    <context:component-scan base-package="com.arvato.cc">
+        <context:include-filter type="regex"
+                                expression="[dao1|service1|dao|service]\.[impl|mock|tasks]\..+[Impl|Task]$"/>
+    </context:component-scan>
+
+    <bean class="com.arvato.cc.util.WatsonsContextHelper" lazy-init="false"/>
+
+    <context:component-scan base-package="com.arvato.cc.jst.jobs"/>
+
+    <!--handle order -->
+    <bean id="orderProducerExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="30"/>
+        <property name="maxPoolSize" value="60"/>
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+        </property>
+    </bean>
+
+    <bean id="reportProducerExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="30"/>
+        <property name="maxPoolSize" value="45"/>
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+        </property>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+</beans>

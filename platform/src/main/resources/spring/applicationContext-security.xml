@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:b="http://www.springframework.org/schema/beans" xmlns="http://www.springframework.org/schema/security"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http auto-config="true" access-denied-page="/accessDenied">
+        <!--为alipay回调url放行-->
+        <intercept-url pattern="/bsh/pay/feedbackAlipay" filters="none"/>
+        <form-login login-page="/login" authentication-failure-url="/loginException"
+                    authentication-success-handler-ref="customizedAuthenticationSuccessHandler"/>
+        <logout invalidate-session="true" logout-success-url="/login"/>
+        <!--<session-management invalid-session-url="/login">-->
+            <!--&lt;!&ndash;<concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>&ndash;&gt;-->
+        <!--</session-management>-->
+        <remember-me/>
+        <custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor"/>
+        <custom-filter before="FORM_LOGIN_FILTER" ref="captchaAuthenticationFilter"/>
+    </http>
+
+    <b:bean name="customizedAuthenticationSuccessHandler"
+            class="com.arvato.platform.security.CustomizedAuthenticationSuccessHandler"/>
+
+
+    <authentication-manager alias="myAuthenticationManager">
+        <authentication-provider user-service-ref='myUserDetailsService'>
+            <password-encoder hash="md5">
+            </password-encoder>
+        </authentication-provider>
+    </authentication-manager>
+
+    <b:bean id="myUserDetailsService" class="com.arvato.platform.security.jdbc.JdbcDaoImpl">
+        <b:property name="dataSource" ref="dataSource"/>
+        <!--<b:property name="usersByUsernameQuery"
+                    value="SELECT oms_User_Id,oms_User_Password,oms_User_Status,CREDENTIALS_IS_EXPIRED,ACCOUNT_IS_LOCKED,ACCOUNT_IS_INIT
+                    FROM oms_User u WHERE u.oms_User_Id=?"/>-->
+        <b:property name="authoritiesByUsernameQuery" value="select ou.USER_ID,omr.ROLE_ID from USER ou join USER_ROLE our on our.USER_SYS_ID = ou.USER_SYS_ID
+					join ROLE omr on our.ROLE_SYS_ID = omr.ROLE_SYS_ID where ou.USER_ID=?"/>
+    </b:bean>
+
+    <b:bean id="bshAccessDecisionManager" class="com.arvato.platform.security.BshAccessDecisionManager"/>
+
+    <b:bean id="bshMethodSecurityMetadataSource"
+            class="com.arvato.platform.security.BshMethodSecurityMetadataSource"/>
+
+    <b:bean id="bshSecurityMetadataSource"
+            class="com.arvato.platform.security.BshSecurityMetadataSource"/>
+
+    <!--class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor"-->
+    <b:bean id="filterSecurityInterceptor"
+            class="com.arvato.platform.security.BshFilterSecurityInterceptor">
+        <b:property name="authenticationManager" ref="myAuthenticationManager"/>
+        <b:property name="accessDecisionManager" ref="bshAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" ref="bshSecurityMetadataSource"/>
+    </b:bean>
+
+    <b:bean id="methodSecurityInterceptor"
+            class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor">
+        <b:property name="authenticationManager" ref="myAuthenticationManager"/>
+        <b:property name="accessDecisionManager" ref="businessAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" ref="bshMethodSecurityMetadataSource"/>
+    </b:bean>
+
+    <b:bean id="businessAccessDecisionManager"
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:property name="allowIfAllAbstainDecisions">
+            <b:value>false</b:value>
+        </b:property>
+        <b:property name="decisionVoters">
+            <b:ref bean="roleVoter"/>
+        </b:property>
+    </b:bean>
+
+    <b:bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
+        <b:property name="rolePrefix">
+            <b:value>ROLE_</b:value>
+        </b:property>
+    </b:bean>
+
+    <b:bean id="resourceDetailsMonitor" class="com.arvato.jdf.security.resource.ResourceDetailsMonitor">
+        <b:property name="queryUrl" value="${permission.url.sql}"/>
+        <b:property name="queryMethod" value="${permission.method.sql}"/>
+
+        <b:property name="dataSource" ref="dataSource"/>
+        <b:property name="filterSecurityInterceptor" ref="filterSecurityInterceptor"/>
+        <b:property name="methodSecurityInterceptor" ref="methodSecurityInterceptor"/>
+    </b:bean>
+
+    <b:bean id="captchaAuthenticationFilter"
+            class="com.arvato.jdf.security.filter.JcaptchaAuthenticationFilter">
+        <b:property name="imageCaptchaService" ref="asyncCaptchaService"/>
+        <b:property name="springSecurityProcessUrlMap">
+            <b:map>
+                <b:entry key="/j_spring_security_check" value="/loginException?error=2"/>
+            </b:map>
+        </b:property>
+    </b:bean>
+
+</b:beans>

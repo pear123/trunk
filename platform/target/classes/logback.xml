@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <property name="main_log_home" value="/opt/bsh/apps/logs"/>
+    <property name="sql_log_home" value="/opt/bsh/apps/sql/logs"/>
+    <property name="pattern_str" value="%green(%d{yyyy-MM-dd HH:mm:ss.SSS})  %-4relative %yellow([%thread]) %highlight(%-5level) %cyan(%logger{50}) - %msg%n"/>
+
+    <property name="host" value="smtp.163.com"/>
+    <property name="port" value="25"/>
+    <property name="ssl" value="false"/>
+    <property name="username" value="xuandroid"/>
+    <property name="password" value="xx512410"/>
+    <property name="to" value="kalend.zhang@bertelsmann.com.cn"/>
+    <property name="to2" value="liping.cao@bertelsmann.com.cn"/>
+    <property name="to3" value="happy.zhou@bertelsmann.com.cn"/>
+    <property name="to4" value="jian.hu@bertelsmann.com.cn"/>
+    <property name="to5" value="alex.wang@bertelsmann.com.cn"/>
+    <property name="from" value="xuandroid@163.com"/>
+    <property name="subject" value="CC MONITORING LOG"/>
+
+
+    <!--聚石塔拉单订单相关日志-->
+    <appender name="JSTORDERWS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/jstOrder/jstOrderWs.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("JST_ORDER_WS");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/jstOrder/jstOrderWs.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="LOGEMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${host}</smtpHost>
+        <smtpPort>${port}</smtpPort>
+        <username>${username}</username>
+        <password>${password}</password>
+        <SSL>${ssl}</SSL>
+        <to>${to}</to>
+        <to>${to2}</to>
+        <to>${to3}</to>
+        <to>${to4}</to>
+        <to>${to5}</to>
+        <from>${from}</from>
+        <subject>${subject}</subject>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("ERROR");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <layout class="ch.qos.logback.classic.html.HTMLLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}%thread%-5level%logger{15}%message</pattern>
+        </layout>
+        <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTrackerImpl">
+            <bufferSize>1</bufferSize>
+        </cyclicBufferTracker>
+    </appender>
+
+    <!--财务报表单相关日志-->
+    <appender name="FINANCEREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/financeReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("FIANANCE_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/financeReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--区域销售报表单相关日志-->
+    <appender name="AREASALEREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/areaSaleReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("AREA_SALE_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/areaSaleReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--配送报表单相关日志-->
+    <appender name="DELIVERYREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/deliveryReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("DELIVERY_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/deliveryReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--配送报表单相关日志-->
+    <appender name="SALESTRUCTUREREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/saleStruictureReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("SALESTRUCTURE_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/saleStruictureReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--配送报表单相关日志-->
+    <appender name="RESTFINANCEREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/restFinanceReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("RESTFINANCE_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/restFinanceReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--订单发票相关日志-->
+    <appender name="ORDERREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/orderReport.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("ORDER_REPORT");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/orderReport.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--ALIPAY相关日志-->
+    <appender name="ALIPAY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/report/alipay.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("ALIPAY");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/report/alipay.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--JOB相关日志-->
+    <appender name="JOB" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/job/job.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("JOB");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/job/job.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--错误相关日志-->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/error/error.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("ERROR");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/error/error.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--操作日志获取相关日志-->
+    <appender name="OPERATION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/opration/Opration.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("OPERATION_LOG");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/opration/Opration.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="sqlLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${sql_log_home}/sqlLog.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${sql_log_home}/sqlLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="RootConsoleAppender">
+        <encoder charset="UTF-8" class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern_str}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="RootConsoleAppender"/>
+    </root>
+
+    <logger name="com.arvato.platform.controller" level="INFO" additivity="false">
+        <appender-ref ref="FINANCEREPORT"/>
+        <appender-ref ref="AREASALEREPORT"/>
+        <appender-ref ref="DELIVERYREPORT"/>
+        <appender-ref ref="SALESTRUCTUREREPORT"/>
+        <appender-ref ref="RESTFINANCEREPORT"/>
+        <appender-ref ref="ORDERREPORT"/>
+        <appender-ref ref="ALIPAY"/>
+        <appender-ref ref="OPERATION_LOG"/>
+        <appender-ref ref="ERROR"/>
+    </logger>
+
+    <logger name="com.arvato.cc.service1.impl" level="INFO" additivity="false">
+        <appender-ref ref="JOB"/>
+        <appender-ref ref="FINANCEREPORT"/>
+        <appender-ref ref="AREASALEREPORT"/>
+        <appender-ref ref="DELIVERYREPORT"/>
+        <appender-ref ref="SALESTRUCTUREREPORT"/>
+        <appender-ref ref="RESTFINANCEREPORT"/>
+        <appender-ref ref="ORDERREPORT"/>
+        <appender-ref ref="ALIPAY"/>
+        <appender-ref ref="OPERATION_LOG"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.platform.jobs" level="INFO" additivity="false">
+        <appender-ref ref="JOB"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.cc.JstWebService.service" level="INFO" additivity="false">
+        <appender-ref ref="JSTORDERWS"/>
+    </logger>
+
+    <logger name="com.arvato.cc.JstWebService.service" level="ERROR" additivity="false">
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
+        <appender-ref ref="sqlLog"/>
+    </logger>
+
+</configuration>

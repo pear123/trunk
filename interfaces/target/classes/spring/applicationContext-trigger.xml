@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--启动定时器 各位将自己的Job放入这个List中-->
+    <!--<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">-->
+        <!--<property name="autoStartup" value="true"/>-->
+        <!--<property name="startupDelay" value="100"/>-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="transactionManager" ref="transactionManager"/>-->
+        <!--<property name="jobFactory">-->
+            <!--<bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;<property name="taskExecutor" ref="taskExecutor"/>&ndash;&gt;-->
+        <!--<property name="quartzProperties">-->
+            <!--<value>-->
+                <!--org.quartz.jobStore.class=dataSourceJobStore-->
+                <!--org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate-->
+                <!--org.quartz.jobStore.isClustered=true-->
+            <!--</value>-->
+        <!--</property>-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--&lt;!&ndash;<ref bean="omsOrdersPusherTrigger"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<ref bean="findFinanceTrigger"/>&ndash;&gt;-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="omsOrdersPusherJob" class="com.arvato.oms.eos.jobs.OmsOrdersPusher"></bean>
+
+    <bean id="omsOrdersPusherCore" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        实际调用类
+        <property name="targetObject" ref="omsOrdersPusherJob" />
+        实际调用方法
+        <property name="targetMethod" value="executeInTransaction" />
+        是否允许并发
+        <property name="concurrent" value="false"/>
+    </bean>-->
+
+    <!--<bean id="omsOrdersPusherTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail">-->
+            <!--<bean class="org.quartz.JobDetail">-->
+                <!--<property name="name" value="omsOrdersPusherJob"/>-->
+                <!--<property name="jobClass" value="com.arvato.oms.eos.jobs.OmsOrdersPusher"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+        <!--<property name="cronExpression" value="0 0 0,10,12,13,15,18 * * ?"/>-->
+    <!--</bean>-->
+
+
+    <!--<bean id="findFinanceJob" class="com.arvato.oms.finance.jobs.FindFinanceJob"></bean>
+
+    <bean id="findFinanceCore" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        实际调用类
+        <property name="targetObject" ref="findFinanceJob" />
+        实际调用方法
+        <property name="targetMethod" value="executeInTransaction" />
+        是否允许并发
+        <property name="concurrent" value="false"/>
+    </bean>-->
+
+    <!--<bean id="findFinanceTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail">-->
+            <!--<bean class="org.quartz.JobDetail">-->
+                <!--<property name="name" value="findFinanceJob"/>-->
+                <!--<property name="jobClass" value="com.arvato.oms.finance.jobs.FindFinanceJob"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+        <!--<property name="cronExpression" value="0 0/5 * * * ?"/>-->
+    <!--</bean>-->
+
+
+    <!--<bean id="dataSourceJobStore"-->
+          <!--class="org.springframework.scheduling.quartz.LocalDataSourceJobStore">-->
+        <!--<property name="tablePrefix" value="QRTZ_"/>-->
+        <!--<property name="instanceId" value="AUTO"/>-->
+        <!--<property name="dataSource" value="dataSource"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="taskExecutor"-->
+          <!--class="org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor">-->
+        <!--<property name="threadCount" value="2"/>-->
+        <!--<property name="threadPriority" value="5"/>-->
+    <!--</bean>-->
+
+
+</beans>
+	

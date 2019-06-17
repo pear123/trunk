@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/layouts">
+    <excludes>
+        <pattern>/jcatcha.do</pattern>
+        <pattern>/login*</pattern>
+        <pattern>/static/*</pattern>
+        <pattern>*/json</pattern>
+        <pattern>*.js*</pattern>
+        <pattern>/common/*</pattern>
+        <pattern>/pay/*</pattern>
+        <pattern>/updateCredential</pattern>
+        <pattern>/user/resetPassword*</pattern>
+        <pattern>/user/resetPasswordSuccess*</pattern>
+        <pattern>/user/updatePasswordBySendEmail*</pattern>
+    </excludes>
+
+    <!--<decorator name="warehouse" page="warehouse_main.jsp">
+    	<pattern>/omsDelivaryVendor/*</pattern>
+        <pattern>/omsWarehouse/*</pattern>
+        <pattern>/omsAddress/*</pattern>
+        <pattern>/omsVirtualWarehouse/*</pattern>
+    </decorator>
+    <decorator name="inventory" page="inventory_main.jsp">
+      <pattern>/omsStoreInventory/*</pattern>
+      &lt;!&ndash;  <pattern>/cc/omsInventory/*</pattern> &ndash;&gt;
+    </decorator>
+    <decorator name="report" page="report_main.jsp">
+        <pattern>/omsReport/*</pattern>
+    </decorator>
+    <decorator name="system" page="system_main.jsp">
+        <pattern>/omsRole/*</pattern>
+        <pattern>/omsResource/*</pattern>
+        <pattern>/omsUser/*</pattern>
+        <pattern>/systemParamDefinition/*</pattern>
+        <pattern>/systemParamValue/*</pattern>
+    </decorator>-->
+
+    <decorator name="main" page="main.ftl">
+        <pattern>/*</pattern>
+    </decorator>
+
+</decorators>

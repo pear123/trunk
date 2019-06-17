@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--生成基础数据job-->
+    <bean id="tradeDataJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.TradeDataJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="tradeDataJobDetailTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="tradeDataJobDetail"/>
+        <property name="startDelay" value="1000"/>
+        <property name="repeatInterval" value="120000"/>
+    </bean>
+
+
+    <!--生成订单报表数据job-->
+    <bean id="tradeReportDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.TradeReportJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="tradeReportDetailTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="tradeReportDetail"/>
+        <property name="startDelay" value="180000"/>
+        <property name="repeatInterval" value="120000"/>
+    </bean>
+
+    <!--生成财务报表数据job-->
+    <bean id="financeReportDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.FinanceReportJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="financeReportDetailTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="financeReportDetail"/>
+        <property name="startDelay" value="360000"/>
+        <property name="repeatInterval" value="120000"/>
+    </bean>
+
+    <!--生成发货单报表数据job-->
+    <bean id="deliveryReportDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.DeliveryReportJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="deliveryReportDetailTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="deliveryReportDetail"/>
+        <property name="startDelay" value="540000"/>
+        <property name="repeatInterval" value="120000"/>
+    </bean>
+
+
+
+    <!--订单错误在推送job-->
+    <bean id="checkTradeDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.CheckTradeJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="checkTradeDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="checkTradeDetail"/>
+        <property name="startDelay" value="1000"/>
+        <property name="cronExpression" value="0 0 1 * * ?"/>
+        <!--<property name="cronExpression" value="0 0/1 * * * ?"/>-->
+    </bean>
+
+    <!--生成财务报表数据job-->
+    <bean id="cleanTempTradeDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.platform.jobs.CleanTempTradeJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="cleanTempTradeDetailTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="cleanTempTradeDetail"/>
+        <property name="startDelay" value="1000"/>
+        <property name="repeatInterval" value="60000"/>
+    </bean>
+
+    <bean id="startQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method="destroy">
+        <!--定义一个触发器-->
+        <property name="triggers">
+            <list>
+                <ref bean="tradeDataJobDetailTrigger"/>
+                <ref bean="tradeReportDetailTrigger"/>
+                <ref bean="financeReportDetailTrigger"/>
+                <ref bean="deliveryReportDetailTrigger"/>
+                <!--<ref bean="cleanTempTradeDetailTrigger"/>-->
+                <ref bean="checkTradeDetailTrigger"/>
+            </list>
+        </property>
+    </bean>
+</beans>
+

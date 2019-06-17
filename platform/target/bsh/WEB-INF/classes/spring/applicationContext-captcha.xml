@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="asyncCaptchaService" class="com.arvato.platform.security.captcha.AsyncCaptchaService">
+        <constructor-arg index="0" type="com.octo.captcha.engine.CaptchaEngine" ref="imageEngine"/>
+        <constructor-arg index="1" type="int" value="300"/>
+        <constructor-arg index="2" type="int" value="200000"/>
+        <constructor-arg index="3" type="int" value="100000"/>
+    </bean>
+
+    <!-- 定义验证码图片Service -->
+    <!--<bean id="imageCaptchaService" class="com.octo.captcha.service.multitype.GenericManageableCaptchaService">
+        <constructor-arg index="0" type="com.octo.captcha.engine.CaptchaEngine" ref="imageEngine"/>
+        <constructor-arg index="1" type="int" value="300"/>
+        <constructor-arg index="2" type="int" value="200000"/>
+        <constructor-arg index="3" type="int" value="100000"/>
+    </bean>-->
+
+    <!-- 定义验证码图片引擎 -->
+    <bean id="imageEngine" class="com.octo.captcha.engine.GenericCaptchaEngine">
+        <constructor-arg>
+            <list>
+                <ref bean="imageCaptchaFactory"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 定义验证码图片工厂类 -->
+    <bean id="imageCaptchaFactory" class="com.octo.captcha.image.gimpy.GimpyFactory">
+        <!-- 设置字符生成器 -->
+        <constructor-arg index="0" ref="wordgenerator" />
+        <!-- 设置字符到图片转换器 -->
+        <constructor-arg index="1" ref="wordtoimage" />
+    </bean>
+
+    <!-- 定义字符生成器 -->
+    <bean id="wordgenerator" class="com.octo.captcha.component.word.wordgenerator.RandomWordGenerator">
+        <!--<constructor-arg value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"/>-->
+        <constructor-arg value="0123456789"/>
+    </bean>
+
+    <!-- 定义字符到图片转换器 -->
+    <bean id="wordtoimage" class="com.octo.captcha.component.image.wordtoimage.ComposedWordToImage">
+        <constructor-arg index="0" ref="fontGenRandom"/>
+        <constructor-arg index="1" ref="backGenUni"/>
+        <constructor-arg index="2" ref="nonLinearTextPaster"/>
+    </bean>
+
+    <!-- 定义验证码字体生成器 -->
+    <bean id="fontGenRandom" class="com.octo.captcha.component.image.fontgenerator.RandomFontGenerator">
+        <constructor-arg index="0" value="18"/>
+        <constructor-arg index="1" value="19"/>
+        <constructor-arg index="2">
+            <list>
+                <ref bean="fontArial"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="fontArial" class="java.awt.Font">
+        <constructor-arg index="0" value="Lucida Sans Unicode"/>
+        <constructor-arg index="1" value="1"/>
+        <constructor-arg index="2" value="10"/>
+    </bean>
+
+    
+    <bean id="backGenUni" class="com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator">
+        <constructor-arg index="0" value="80"/>
+        <constructor-arg index="1" value="25"/>
+        <constructor-arg index="2" ref="white"/>           
+    </bean>   
+
+    <bean id="nonLinearTextPaster" class="com.octo.captcha.component.image.textpaster.NonLinearTextPaster">
+        <constructor-arg type="java.lang.Integer" index="0" value="4"/>
+        <constructor-arg type="java.lang.Integer" index="1" value="4"/>
+        <constructor-arg type="com.octo.captcha.component.image.color.ColorGenerator" index="2" ref="colorGenWhite"/>
+        <constructor-arg index="3" value="false"/>
+    </bean>
+
+    <bean id="colorGenWhite" class="com.octo.captcha.component.image.color.SingleColorGenerator">
+        <constructor-arg index="0" ref="black"/>
+    </bean>
+    
+    <bean id="white" class="java.awt.Color">
+        <constructor-arg type="int" index="0" value="255"/>
+        <constructor-arg type="int" index="1" value="255"/>
+        <constructor-arg type="int" index="2" value="255"/>
+    </bean>
+
+    <bean id="black" class="java.awt.Color">
+        <constructor-arg type="int" index="0" value="0"/>
+        <constructor-arg type="int" index="1" value="0"/>
+        <constructor-arg type="int" index="2" value="0"/>
+    </bean>
+
+</beans>

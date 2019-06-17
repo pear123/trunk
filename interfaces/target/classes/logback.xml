@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <property name="main_log_home" value="/u01/bsh/apps/logs"/>
+
+    <property name="host" value="10.82.37.73"/>
+    <property name="port" value="25"/>
+    <property name="ssl" value="false"/>
+    <property name="username" value=""/>
+    <property name="password" value=""/>
+    <property name="to" value="guanghua.pan@bertelsmann.com.cn"/>
+    <property name="to2" value="wen.shi@bertelsmann.com.cn"/>
+    <property name="to3" value="leo.xiao@watsons.com.cn"/>
+    <property name="to4" value="Chris.Kuang@watsons.com.cn"/>
+    <property name="from" value="oms@watsonsestore.com.cn"/>
+
+    <appender name="EOSLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${main_log_home}/eos.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/eosLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="HybrisLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${main_log_home}/Hybris.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/HybrisLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SoapLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${main_log_home}/Soap.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/SoapLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="LOGEMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${host}</smtpHost>
+        <smtpPort>${port}</smtpPort>
+        <!--<username>${username}</username>-->
+        <!--<password>${password}</password>-->
+        <SSL>${ssl}</SSL>
+        <to>${to}</to>
+        <to>${to2}</to>
+        <to>${to3}</to>
+        <to>${to4}</to>
+        <from>${from}</from>
+        <subject>PROD OMS Interface App</subject>
+        <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+            <marker>FIND_FINANCE_JOB_ERROR</marker>
+            <marker>OMS_ORDER_PUSH_ERROR</marker>
+            <marker>EOS_CALL_OMS_EXCEPTION</marker>
+            <marker>HYBRIS_CALL_OMS_EXCEPTION</marker>
+        </evaluator>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date %-5level %logger{35} - %message%n</pattern>
+        </layout>
+        <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTrackerImpl">
+            <bufferSize>1</bufferSize>
+        </cyclicBufferTracker>
+    </appender>
+
+    <logger name="com.arvato.oms.eos" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.eos.service" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.util" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.sftp" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.finance" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.service1" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.dao1" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.eos.controller" level="DEBUG" additivity="false">
+        <appender-ref ref="EOSLog"/>
+    </logger>
+
+
+    <logger name="com.arvato.oms.hybris" level="DEBUG" additivity="false">
+        <appender-ref ref="HybrisLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.service1" level="DEBUG" additivity="false">
+        <appender-ref ref="HybrisLog"/>
+    </logger>
+
+    <logger name="com.arvato.oms.dao1" level="DEBUG" additivity="false">
+        <appender-ref ref="HybrisLog"/>
+    </logger>
+
+    <logger name="javax.jws.WebService" level="INFO" additivity="false">
+        <appender-ref ref="SoapLog"/>
+    </logger>
+
+    <logger name="javax.jws.WebService" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.oms.finance" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.oms.eos" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.oms.eos.controller" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <logger name="com.arvato.oms.hybris.service" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <root>
+        <level value="debug"/>
+        <appender-ref ref="RootConsoleAppender"/>
+        <appender-ref ref="EOSLog"/>
+        <appender-ref ref="SoapLog"/>
+        <appender-ref ref="LOGEMAIL"/>
+    </root>
+
+
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.hibernate.SQL" level="ERROR"/>
+    <logger name="org.hibernate" level="ERROR"/>
+
+    <logger name="com.opensymphony" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="org.tuckey" level="ERROR"/>
+    <logger name="net.sf.ehcache" level="ERROR"/>
+    <logger name="com.jolbox" level="ERROR"/>
+    <logger name="com.octo.captcha" level="ERROR"/>
+
+    <logger name="com.arvato.jdf.cache" level="WARN"/>
+    <logger name="com.arvato.jdf" level="DEBUG"/>
+    <logger name="com.arvato.smartec.dao" level="DEBUG"/>
+    <logger name="com.arvato.smartec.service" level="DEBUG"/>
+    <logger name="com.arvato.smartec" level="DEBUG"/>
+
+</configuration>

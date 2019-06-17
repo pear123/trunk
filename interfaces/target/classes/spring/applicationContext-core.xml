@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="true">
+    <!--&lt;!&ndash; scan and set properties file&ndash;&gt;-->
+    <!--<context:property-placeholder location="classpath*:config/*.properties"/>-->
+
+    <!--<context:annotation-config/>-->
+
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">-->
+        <!--<property name="targetDataSource">-->
+            <!--<bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close"-->
+                  <!--p:driverClass="${jdbc.driverClassName}" p:jdbcUrl="${jdbc.url}" p:username="${jdbc.username}"-->
+                  <!--p:password="${jdbc.password}"-->
+                  <!--p:idleConnectionTestPeriodInMinutes="30"-->
+                  <!--p:idleMaxAgeInMinutes="5"-->
+                  <!--p:maxConnectionsPerPartition="30"-->
+                  <!--p:minConnectionsPerPartition="20"-->
+                  <!--p:partitionCount="3"-->
+                  <!--p:acquireIncrement="10"-->
+                  <!--p:statementsCacheSize="50"-->
+                  <!--p:releaseHelperThreads="3"-->
+                  <!--p:connectionTimeoutInMs="2"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"-->
+          <!--p:dataSource-ref="dataSource">-->
+        <!--<property name="hibernateProperties">-->
+            <!--<value>-->
+                <!--hibernate.dialect=${hibernate.dialect}-->
+                <!--hibernate.show_sql=${hibernate.show_sql}-->
+                <!--hibernate.jdbc.fetch_size=100-->
+                <!--hibernate.jdbc.batch_size=100-->
+                <!--hibernate.query.substitutions=true 1, false 0-->
+                <!--hibernate.cache.use_second_level_cache=true-->
+                <!--hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider-->
+            <!--</value>-->
+        <!--</property>-->
+        <!--<property name="packagesToScan">-->
+            <!--<list>-->
+                <!--<value>com.arvato.cc.model</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager"-->
+          <!--p:sessionFactory-ref="sessionFactory"/>-->
+
+    <!--<tx:annotation-driven/>-->
+
+
+    <!--<aop:config>-->
+        <!--<aop:advisor advice-ref="txAdvice"-->
+                     <!--pointcut="execution(* com.*..*.service1.*Service.*(..))-->
+                     <!--|| execution(* com.*..*.service1.finance.*Service.*(..)) "/>-->
+    <!--</aop:config>-->
+    <!--<bean class="com.arvato.cc.util.WatsonsContextHelper" lazy-init="false"/>-->
+    <!--<tx:advice id="txAdvice">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="get*" read-only="true"/>-->
+            <!--<tx:method name="*" rollback-for="Exception"/>-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--<context:component-scan base-package="com.arvato.cc">-->
+        <!--<context:include-filter type="regex" expression="[dao1|service1|dao|service]\.[impl|mock]\..+Impl$"/>-->
+    <!--</context:component-scan>-->
+
+    <!--<context:component-scan base-package="com.arvato.cc">-->
+        <!--<context:include-filter type="regex" expression="[dao1|service1]\.[finance]\.[impl|mock]\..+Impl$"/>-->
+    <!--</context:component-scan>-->
+
+    <!--&lt;!&ndash;<context:component-scan base-package="com.watsons.report">&ndash;&gt;-->
+        <!--&lt;!&ndash;<context:include-filter type="regex" expression="[dao|service]\.[impl|mock]\..+Impl$"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</context:component-scan>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<context:component-scan base-package="com.arvato.oms.workflow.order"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<context:component-scan base-package="com.arvato.oms.connector.eos"/>&ndash;&gt;-->
+
+    <!--<bean id="orderProducerExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+        <!--<property name="corePoolSize" value="30"/>-->
+        <!--<property name="maxPoolSize" value="60"/>-->
+        <!--<property name="rejectedExecutionHandler">-->
+            <!--<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="reportProducerExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+        <!--<property name="corePoolSize" value="30"/>-->
+        <!--<property name="maxPoolSize" value="45"/>-->
+        <!--<property name="rejectedExecutionHandler">-->
+            <!--<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+</beans>

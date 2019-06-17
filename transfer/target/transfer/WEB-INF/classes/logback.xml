@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="main_log_home" value="/opt/bsh/apps/logs"/>
+
+    <property name="host" value="smtp.163.com"/>
+    <property name="port" value="25"/>
+    <property name="ssl" value="false"/>
+    <property name="username" value="xuandroid"/>
+    <property name="password" value="xx512410"/>
+    <property name="to" value="kalend.zhang@bertelsmann.com.cn"/>
+    <property name="to2" value="liping.cao@bertelsmann.com.cn"/>
+    <!--<property name="to3" value="leo.xiao@watsons.com.cn"/>-->
+    <!--<property name="to4" value="Chris.Kuang@watsons.com.cn"/>-->
+    <property name="from" value="xuandroid@163.com"/>
+
+
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="RootConsoleAppender">
+        <encoder charset="UTF-8" class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss},%p,%c,%t %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--聚石塔拉单订单相关日志-->
+    <appender name="JSTORDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${main_log_home}/jstOrder/jstOrder.log</File>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("JST_ORDER");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${main_log_home}/jstOrder/jstOrder.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <appender name="LOGEMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${host}</smtpHost>
+        <smtpPort>${port}</smtpPort>
+        <username>${username}</username>
+        <password>${password}</password>
+        <SSL>${ssl}</SSL>
+        <to>${to}</to>
+        <to>${to2}</to>
+        <!--<to>${to3}</to>-->
+        <!--<to>${to4}</to>-->
+        <from>${from}</from>
+        <subject>PROD OMS Interface App</subject>
+        <!--<evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">-->
+            <!--<marker>FIND_FINANCE_JOB_ERROR</marker>-->
+            <!--<marker>OMS_ORDER_PUSH_ERROR</marker>-->
+            <!--<marker>EOS_CALL_OMS_EXCEPTION</marker>-->
+            <!--<marker>HYBRIS_CALL_OMS_EXCEPTION</marker>-->
+        <!--</evaluator>-->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("SEND_ERROR_MAIL");</expression>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date %-5level %logger{35} - %message%n</pattern>
+        </layout>
+        <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTrackerImpl">
+            <bufferSize>1</bufferSize>
+        </cyclicBufferTracker>
+    </appender>
+
+    <logger name="com.arvato.cc.jst.jobs" level="INFO" additivity="fasle">
+        <appender-ref ref="JSTORDER"/>
+    </logger>
+
+    <logger name="com.arvato.cc" level="ERROR" additivity="false">
+        <appender-ref ref="LOGEMAIL"/>
+    </logger>
+
+    <root level="ERROR">
+        <appender-ref ref="RootConsoleAppender"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--订单定时同步job-->
+    <bean id="syncJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.cc.jst.jobs.JstClientJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="syncJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="syncJobDetail"/>
+        <property name="startDelay" value="1000"/>
+        <property name="cronExpression" value="0 0/2 * * * ?"/>
+    </bean>
+    <!--订单错误在推送job-->
+    <bean id="syncErrorJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.cc.jst.jobs.JstErrorReSendJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="syncErrorJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="syncErrorJob"/>
+        <property name="startDelay" value="1000"/>
+        <property name="cronExpression" value="0 0/1 * * * ?"/>
+    </bean>
+
+
+    <!--订单定时同步job 根据开始/结束时间拉取订单-->
+    <bean id="syncJobDetailBySeller" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.cc.jst.jobs.JstClientBySellerJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="syncJobDetailBySellerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="syncJobDetailBySeller"/>
+        <property name="startDelay" value="1000"/>
+        <property name="cronExpression" value="0 0/5 * * * ?"/>
+    </bean>
+
+    <!--订单退款定时同步job-->
+    <bean id="syncRefundJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.arvato.cc.jst.jobs.JstRefundClientJob"/>
+        </property>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="syncRefundJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="syncRefundJobDetail"/>
+        <property name="startDelay" value="1000"/>
+        <property name="cronExpression" value="0 0/5 * * * ?"/>
+    </bean>
+
+    <bean id="startQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method="destroy">
+        <!--定义一个触发器-->
+        <property name="triggers">
+            <list>
+                <ref bean="syncJobDetailTrigger"/>
+                <ref bean="syncErrorJobTrigger"/>
+                <ref bean="syncRefundJobDetailTrigger"/>
+                <!--此Job目前不需要启动-->
+                <!--<ref bean="syncJobDetailBySellerTrigger"/>-->
+                <!--此Job目前不需要启动-->
+            </list>
+        </property>
+    </bean>
+</beans>
+	

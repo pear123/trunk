@@ -1,0 +1,25 @@
+﻿#loginTop{background:url("../images/login/login01.jpg") no-repeat;width:950px;height:109px;}
+#loginTop h1{background:url("../images/login/logo.gif") no-repeat;width:303px;height:46px;float:left;margin-top:32px;margin-left:46px;_margin-left:25px;}
+#loginBody{border:1px solid #c0c0c0;width:948px;background:url("../images/login/login02.jpg") repeat-x;height:386px;}
+.loginMain{margin:0px auto;width:422px;margin-top:60px;background:#fff;}
+.roundTopL{background:url("../images/login/roundTopL.jpg") no-repeat;width:15px;height:15px;float:left;}
+.roundTopM{border-top:1px solid #d4d4d4;width:392px;float:left;height:14px;}
+.roundTopR{background:url("../images/login/roundTopR.jpg") no-repeat;width:15px;height:15px;float:left;}
+
+.loginContent{border-left:1px solid #d4d4d4;border-right:1px solid #d4d4d4;width:420px;padding-bottom:10px;}
+.loginContent table{width:392px;}
+.loginContent table td{line-height:40px;padding-left:10px;}
+.loginContent table td input{margin-right:30px;margin-top:10px;}
+.loginContent table td input.inputText{border:1px solid #7f9db9;width:170px;padding:2px;margin:0px;color:#666666;font-family:arial;}
+.loginContent table td select{width:176px;padding:2px;border:1px solid #7f9db9;font-family:arial;}
+.loginContent table td span.red{color:#ff0000;margin-right:5px;}
+
+.roundBottomL{background:url("../images/login/roundBottomL.jpg") no-repeat;width:15px;height:15px;float:left;}
+.roundBottomM{border-bottom:1px solid #d4d4d4;width:392px;float:left;height:14px;}
+.roundBottomR{background:url("../images/login/roundBottomR.jpg") no-repeat;width:15px;height:15px;float:left;}
+
+.roundReflectionL{background:url("../images/login/roundReflectionL.jpg") no-repeat;height:40px;width:14px;float:left;}
+.roundReflectionM{background:url("../images/login/roundReflectionBg.jpg") repeat-x;height:40px;float:left;width:394px}
+.roundReflectionR{background:url("../images/login/roundReflectionR.jpg") no-repeat;height:40px;width:14px;float:left;}
+
+#loginFoot{background:#999999;height:43px;width:950px;font-family:arial;color:#fff;text-align:center;line-height:43px;}
