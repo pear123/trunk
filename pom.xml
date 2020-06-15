@@ -660,7 +660,7 @@
         <quartz.version>1.8.5</quartz.version>
         <org.quartz.version>1.8.5</org.quartz.version>
         <hibernate.version>3.6.9.Final</hibernate.version>
-        <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
+        <hibernate.validator.version>5.3.5.Final</hibernate.validator.version>
         <javax.jaxb.version>2.1</javax.jaxb.version>
         <oracle.ojdbc14.version>10.2.0.3.0</oracle.ojdbc14.version>
         <bonecp.version>0.7.1.RELEASE</bonecp.version>
