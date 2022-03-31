@@ -643,7 +643,7 @@
         <log4jdbc.version>1.2</log4jdbc.version>
         <jrobin.version>1.5.9</jrobin.version>
         <javamelody.version>1.56.0</javamelody.version>
-        <spring.framework.version>3.2.0.RELEASE</spring.framework.version>
+        <spring.framework.version>5.3.18</spring.framework.version>
         <logback.classic.version>1.0.11</logback.classic.version>
         <log4j.version>1.2.13</log4j.version>
         <slf4j.jcl_over.version>1.7.4</slf4j.jcl_over.version>
