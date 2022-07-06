@@ -669,7 +669,7 @@
         <oscache.version>2.4.1</oscache.version>
         <ehcache.version>2.5.0</ehcache.version>
         <ehcache.jmsreplication.version>0.4</ehcache.jmsreplication.version>
-        <jsch.version>0.1.49</jsch.version>
+        <jsch.version>0.1.54</jsch.version>
         <javax.servlet.version>2.4</javax.servlet.version>
         <javax.servlet.jsp.version>2.0</javax.servlet.jsp.version>
         <junit.version>4.5</junit.version>
