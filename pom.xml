@@ -664,7 +664,7 @@
         <javax.jaxb.version>2.1</javax.jaxb.version>
         <oracle.ojdbc14.version>10.2.0.3.0</oracle.ojdbc14.version>
         <bonecp.version>0.7.1.RELEASE</bonecp.version>
-        <cxf.version>3.0.0</cxf.version>
+        <cxf.version>3.0.1</cxf.version>
 
         <oscache.version>2.4.1</oscache.version>
         <ehcache.version>2.5.0</ehcache.version>
